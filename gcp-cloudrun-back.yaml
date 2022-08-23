@@ -1,0 +1,25 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: springboot-gcp-demo
+  labels:
+    cloud.googleapis.com/location: us-central1
+  annotations:
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '3'
+    spec:
+      serviceAccountName: 945812642089-compute@developer.gserviceaccount.com
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      containers:
+      - image: gcr.io/myfirstspringbootdemo/docker-demo:latest
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 256Mi
+  traffic:
+    - percent: 100
+      latestRevision: true
